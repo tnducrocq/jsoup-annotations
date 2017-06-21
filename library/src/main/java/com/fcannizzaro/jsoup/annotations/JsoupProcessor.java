@@ -7,6 +7,7 @@ import com.fcannizzaro.jsoup.annotations.interfaces.Attr;
 import com.fcannizzaro.jsoup.annotations.interfaces.Child;
 import com.fcannizzaro.jsoup.annotations.interfaces.ForEach;
 import com.fcannizzaro.jsoup.annotations.interfaces.Html;
+import com.fcannizzaro.jsoup.annotations.interfaces.IParsable;
 import com.fcannizzaro.jsoup.annotations.interfaces.Items;
 import com.fcannizzaro.jsoup.annotations.interfaces.Selector;
 import com.fcannizzaro.jsoup.annotations.interfaces.Text;
@@ -60,7 +61,7 @@ public class JsoupProcessor {
             if (items != null) {
 
                 ParameterizedType type = (ParameterizedType) f.getGenericType();
-                Class<?> cz = (Class<?>) type.getActualTypeArguments()[0];
+                Class<? extends IParsable> cz = (Class<? extends IParsable>) type.getActualTypeArguments()[0];
                 return fromList(container, cz);
 
             } else if (child != null) {
@@ -123,7 +124,7 @@ public class JsoupProcessor {
      * @param clazz     object class
      * @return object instance
      */
-    public static <T> T from(Element container, Class<T> clazz) {
+    public static <T extends IParsable> T from(Element container, Class<T> clazz) {
 
         try {
 
@@ -184,6 +185,8 @@ public class JsoupProcessor {
                 afterBindMethod.invoke(instance);
             }
 
+            instance.parse(container);
+
             return instance;
 
         } catch (Exception e) {
@@ -197,7 +200,7 @@ public class JsoupProcessor {
     /**
      * Bind multiple object. (Internally use from)
      */
-    public static <T> List<T> fromList(Element container, Class<T> clazz) {
+    public static <T extends IParsable> List<T> fromList(Element container, Class<T> clazz) {
 
         ArrayList<T> items = new ArrayList<>();
 
