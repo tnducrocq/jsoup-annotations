@@ -105,7 +105,7 @@ public class JsoupProcessor {
 
                 value = el.attr(attr.attr());
 
-                if (value == null) {
+                if (!attr.optional() && value == null) {
                     throw new AttributeNotFoundException(attr.attr());
                 }
 
