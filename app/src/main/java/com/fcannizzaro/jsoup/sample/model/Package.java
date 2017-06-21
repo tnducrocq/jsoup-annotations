@@ -27,7 +27,7 @@ public class Package {
     @Attr(query = "h3 a", attr = "href")
     public String link;
 
-    @Text("h3")
+    @Text(value = ".bidon", optional = true)
     public String name;
 
     @Text("p.type-ellipsis")

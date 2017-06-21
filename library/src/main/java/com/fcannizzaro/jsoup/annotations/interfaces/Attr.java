@@ -17,4 +17,5 @@ public @interface Attr {
 
     String attr();
 
+    boolean optional() default false;
 }

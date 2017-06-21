@@ -30,14 +30,14 @@ public class JsoupProcessor {
     /**
      * Extract first element according to a query
      */
-    private static Element element(Element container, String query) {
+    private static Element element(Element container, String query, boolean optional) {
 
         Elements select = container.select(query);
 
         if (select.size() == 0) {
-            throw new ElementNotFoundException(query);
+            if (!optional) throw new ElementNotFoundException(query);
+            return null;
         }
-
         return select.first();
     }
 
@@ -69,7 +69,7 @@ public class JsoupProcessor {
                 Selector sel = (Selector) cz.getAnnotation(Selector.class);
 
                 if (sel != null) {
-                    return from(element(container, sel.value()), cz);
+                    return from(element(container, sel.value(), child.optional()), cz);
                 }
 
             }
@@ -78,11 +78,11 @@ public class JsoupProcessor {
 
         if (selector != null) {
 
-            return element(container, selector.value());
+            return element(container, selector.value(), selector.optional());
 
         } else if (text != null) {
 
-            el = element(container, text.value());
+            el = element(container, text.value(), text.optional());
 
             if (el != null) {
                 return el.text();
@@ -90,7 +90,7 @@ public class JsoupProcessor {
 
         } else if (html != null) {
 
-            el = element(container, html.value());
+            el = element(container, html.value(), html.optional());
 
             if (el != null) {
                 return el.html();
@@ -98,7 +98,7 @@ public class JsoupProcessor {
 
         } else if (attr != null) {
 
-            el = element(container, attr.query());
+            el = element(container, attr.query(), attr.optional());
 
             if (el != null) {
 

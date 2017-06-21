@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 public @interface Selector {
     String value();
+
+    boolean optional() default false;
 }

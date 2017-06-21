@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Html {
     String value();
+
+    boolean optional() default false;
 }
